@@ -125,11 +125,13 @@ class SwitchBotKVSCameraEntity(SwitchBotKVSEntity, CameraEntity):
             and len(self.camera_image_cache[cacheKey][1]) != 0
             and not isDownload
         ):
+            _LOGGER.debug("Cache hit %s %s", width, height)
             return self.camera_image_cache[cacheKey][1]
 
         rtsp_port = await self._regist_go2rtc_stream_if_not_exists(isDownload)
         domain = re.search(r"http://([^:/]+)", self.hass.data["go2rtc"]).group(1)
-        stream_source = f"rtsp://{domain}{rtsp_port}/{self.entity_id}"
+        stream_source = f"rtsp://{domain}:{rtsp_port}/{self.entity_id}"
+        _LOGGER.debug("stream_source %s", stream_source)
 
         camera_image_latest = await ffmpeg.async_get_image(
             self.hass, stream_source, width=width, height=height, extra_cmd="-ss 2"
@@ -304,7 +306,7 @@ class SwitchBotKVSCameraEntity(SwitchBotKVSEntity, CameraEntity):
         )
         resp = await rest_client._client.request("GET", "/api")  # noqa: SLF001
         respJson = await resp.json()
-        rtsp_port: str = respJson["rtsp"]["listen"]
+        rtsp_port: str = respJson["rtsp"]["listen"].split(':')[1]
         if isDownload:
             return rtsp_port
 
