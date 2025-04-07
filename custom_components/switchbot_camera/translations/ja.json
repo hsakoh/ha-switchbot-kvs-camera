@@ -1,0 +1,189 @@
+{
+  "config": {
+    "abort": {
+      "already_configured": "Device is already configured"
+    },
+    "error": {
+      "cannot_connect": "Failed to connect",
+      "invalid_auth": "Invalid authentication",
+      "unknown": "Unexpected error"
+    },
+    "step": {
+      "user": {
+        "data": {
+          "password": "パスワード",
+          "username": "ユーザー名(メールアドレス)"
+        }
+      },
+      "reconfigure": {
+        "data": {
+          "password": "パスワード",
+          "username": "ユーザー名(メールアドレス)"
+        }
+      }
+    }
+  },
+  "entity": {
+    "button": {
+      "motor_left": {
+        "name": "Tilt 左"
+      },
+      "motor_right": {
+        "name": "Tilt 右"
+      },
+      "motor_up": {
+        "name": "Pan 上"
+      },
+      "motor_down": {
+        "name": "Pan 下"
+      },
+      "camera_calibration": {
+        "name": "Pan/Tilt キャリブレーション"
+      },
+      "preset_create": {
+        "name": "お気に入りに追加"
+      },
+      "preset_move": {
+        "name": "お気に入りに移動"
+      },
+      "preset_remove": {
+        "name": "お気に入りを削除"
+      }
+    },
+    "number": {
+      "volume_level": {
+        "name": "通話音量"
+      }
+    },
+    "sensor": {
+      "ip_address": {
+        "name": "IPアドレス"
+      },
+      "wifi_signal": {
+        "name": "信号強度"
+      },
+      "wifi_name": {
+        "name": "Wi-Fi名"
+      },
+      "sd_free": {
+        "name": "SDカード 空き容量(GB)"
+      },
+      "sd_total": {
+        "name": "SDカード 総容量(GB)"
+      },
+      "sd_used": {
+        "name": "SDカード 使用済み容量(GB)"
+      },
+      "time_zone_id": {
+        "name": "タイムゾーン(ID)"
+      },
+      "time_zone_posix": {
+        "name": "タイムゾーン(Posix)"
+      },
+      "lastupdate": {
+        "name": "最終更新日時"
+      },
+      "device_mac": {
+        "name": "デバイスID"
+      }
+    },
+    "switch": {
+      "auto_upgrade": {
+        "name": "自動更新"
+      },
+      "cruise_mode": {
+        "name": "巡行モード"
+      },
+      "privacy_mode": {
+        "name": "プライバシーモード"
+      },
+      "night_full_color": {
+        "name": "夜間フルカラー"
+      },
+      "flipview": {
+        "name": "画面回転"
+      },
+      "detect_human": {
+        "name": "人の検知"
+      },
+      "indicator_light": {
+        "name": "表示ランプ"
+      },
+      "motion_tracking": {
+        "name": "動体追跡"
+      },
+      "motion_detection": {
+        "name": "動体検出"
+      },
+      "local_recording": {
+        "name": "ローカルストレージ 録画"
+      },
+      "time_watermark": {
+        "name": "日付とロゴすかし"
+      },
+      "mute_recording": {
+        "name": "ローカルストレージ 音なしで録画"
+      }
+    },
+    "select": {
+      "anti_flicker": {
+        "name": "フリッカー防止",
+        "state": {
+          "_60Hz": "60 Hz",
+          "_50Hz": "50 Hz"
+        }
+      },
+      "night_vision": {
+        "name": "ナイトビジョン",
+        "state": {
+          "OFF": "オフ",
+          "AUTO": "オート",
+          "ALLWAYS_ON": "常にオン"
+        }
+      },
+      "intercom_mode": {
+        "name": "通話モード",
+        "state": {
+          "ONEWAY": "単方向(押しながら話す)",
+          "TWOWAY": "双方向(タップして話す)"
+        }
+      },
+      "sensitivity_level": {
+        "name": "動体検出 検出感度",
+        "state": {
+          "LOW": "低",
+          "MEDIUM": "中",
+          "HIGH": "高"
+        }
+      },
+      "recording_mode": {
+        "name": "ローカルストレージ 録画モード",
+        "state": {
+          "EVENT": "イベントのみを録画",
+          "CONTINUES": "連続録画"
+        }
+      },
+      "preset_list": {
+        "name": "お気に入り"
+      }
+    },
+    "text": {
+      "create_preset_name": {
+        "name": "お気に入りの名称を入力"
+      }
+    }
+  },
+  "options": {
+    "step": {
+      "init": {
+        "data": {
+          "resolution": "解像度",
+          "snapshot_enable": "スナップショット表示",
+          "snapshot_interval": "スナップショットのキャッシュ期間(秒)"
+        },
+        "description": "オプションを設定してください",
+        "title": "統合のオプション"
+      }
+    }
+  }
+}

@@ -1,0 +1,189 @@
+{
+  "config": {
+    "abort": {
+      "already_configured": "Device is already configured"
+    },
+    "error": {
+      "cannot_connect": "Failed to connect",
+      "invalid_auth": "Invalid authentication",
+      "unknown": "Unexpected error"
+    },
+    "step": {
+      "user": {
+        "data": {
+          "password": "Password",
+          "username": "Username(Email Address)"
+        }
+      },
+      "reconfigure": {
+        "data": {
+          "password": "Password",
+          "username": "Username(Email Address)"
+        }
+      }
+    }
+  },
+  "entity": {
+    "button": {
+      "motor_left": {
+        "name": "Tilt Left"
+      },
+      "motor_right": {
+        "name": "Tilt Right"
+      },
+      "motor_up": {
+        "name": "Pan Up"
+      },
+      "motor_down": {
+        "name": "Pan Down"
+      },
+      "camera_calibration": {
+        "name": "Pan/Tilt Calibration"
+      },
+      "preset_create": {
+        "name": "Create Preset"
+      },
+      "preset_move": {
+        "name": "Move To Preset"
+      },
+      "preset_remove": {
+        "name": "Remove Preset"
+      }
+    },
+    "number": {
+      "volume_level": {
+        "name": "Volume Level"
+      }
+    },
+    "sensor": {
+      "ip_address": {
+        "name": "IP Address"
+      },
+      "wifi_signal": {
+        "name": "WiFi Signal"
+      },
+      "wifi_name": {
+        "name": "WiFi Name"
+      },
+      "sd_free": {
+        "name": "SdCard Free(GB)"
+      },
+      "sd_total": {
+        "name": "SdCard Total(GB)"
+      },
+      "sd_used": {
+        "name": "SdCard Used(GB)"
+      },
+      "time_zone_id": {
+        "name": "Timezone(ID)"
+      },
+      "time_zone_posix": {
+        "name": "Timezone(Posix)"
+      },
+      "lastupdate": {
+        "name": "Last Update"
+      },
+      "device_mac": {
+        "name": "Device Mac"
+      }
+    },
+    "switch": {
+      "auto_upgrade": {
+        "name": "Auto Upgrade"
+      },
+      "cruise_mode": {
+        "name": "Cruise Mode"
+      },
+      "privacy_mode": {
+        "name": "Privacy Mode"
+      },
+      "night_full_color": {
+        "name": "Night Full Color"
+      },
+      "flipview": {
+        "name": "Flip View"
+      },
+      "detect_human": {
+        "name": "Detect Human"
+      },
+      "indicator_light": {
+        "name": "Indicator Light"
+      },
+      "motion_tracking": {
+        "name": "Motion Tracking"
+      },
+      "motion_detection": {
+        "name": "Motion Detection"
+      },
+      "local_recording": {
+        "name": "Local Recording"
+      },
+      "time_watermark": {
+        "name": "Time Watermark"
+      },
+      "mute_recording": {
+        "name": "Mute Recording"
+      }
+    },
+    "select": {
+      "anti_flicker": {
+        "name": "Anti Flicker",
+        "state": {
+          "60hz": "60 Hz",
+          "50hz": "50 Hz"
+        }
+      },
+      "night_vision": {
+        "name": "Night Vision",
+        "state": {
+          "off": "Off",
+          "auto": "Auto",
+          "allways_on": "Allways On"
+        }
+      },
+      "intercom_mode": {
+        "name": "Intercom Mode",
+        "state": {
+          "oneway": "Oneway",
+          "twoway": "Twoway"
+        }
+      },
+      "sensitivity_level": {
+        "name": "Sensitivity Level",
+        "state": {
+          "low": "Low",
+          "medium": "Medium",
+          "high": "High"
+        }
+      },
+      "recording_mode": {
+        "name": "Recording Mode",
+        "state": {
+          "event": "Event",
+          "continues": "Continues"
+        }
+      },
+      "preset_list": {
+        "name": "Preset List"
+      }
+    },
+    "text": {
+      "create_preset_name": {
+        "name": "Enter Preset Name"
+      }
+    }
+  },
+  "options": {
+    "step": {
+      "init": {
+        "data": {
+          "resolution": "Camera Resolution",
+          "snapshot_enable": "Snapshot Enable",
+          "snapshot_interval": "Snapshot Cache Expires(seconds)"
+        },
+        "description": "Amend your options.",
+        "title": "Integration Options"
+      }
+    }
+  }
+}
