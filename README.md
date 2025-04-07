@@ -77,6 +77,10 @@ If you want to integrate unsupported devices into Home Assistant:
 | SdCard Total(GB)     | Displays the total space of the SD card                                               |
 | SdCard Used(GB)      | Displays the used space on the SD card                                                |
 
+Currently, **Audio is not supported**. This is due to two reasons:
+- Specifying an audio codec other than AAC causes the camera to respond with a broken SDP.
+- go2rtc (pion?) does not support the AAC codec in WebRTC.
+
 The following features are not currently implemented. Pull requests are welcome:
 
 - Triggering alerts
