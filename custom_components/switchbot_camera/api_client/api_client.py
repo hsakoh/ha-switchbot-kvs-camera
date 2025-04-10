@@ -268,7 +268,7 @@ class SwitchBotApiClient:
                 ).decode()
             )
             if self.save_refreshed_token is not None:
-                await self.save_refreshed_token()
+                self.save_refreshed_token()
 
     async def __get_all_groups(self) -> list[Group]:
         """Get groups."""
