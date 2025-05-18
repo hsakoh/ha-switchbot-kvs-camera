@@ -1,11 +1,10 @@
 name: HACS Action
 
-on: 
-  workflow_dispatch:
-#  push:
-#  pull_request:
-#  schedule:
-#    - cron: "0 0 * * *"
+on:
+  push:
+  pull_request:
+  schedule:
+    - cron: "0 0 * * *"
 
 jobs:
   hacs:
