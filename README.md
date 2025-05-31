@@ -92,15 +92,23 @@ The following features are not currently implemented. Pull requests are welcome:
 
 ## Installation
 
-- [HACS](https://hacs.xyz/) > Integrations > Custom Repository > Add this URL <https://github.com/hsakoh/ha-switchbot-kvs-camera> as integration > Download it.
-<!-- - [![Open your Home Assistant instance and open a repository inside the Home Assistant Community Store.](https://my.home-assistant.io/badges/hacs_repository.svg)](https://my.home-assistant.io/redirect/hacs_repository/?owner=hsakoh&repository=https%3A%2F%2Fgithub.com%2Fhsakoh%2Fha-switchbot-kvs-camera) -->
-
-## Requirement
+### Requirement
 
 - Ensure that the version of Home Assistant Core is **2025.4.1** or later.
   - This is because the [go2rtc](https://github.com/AlexxIT/go2rtc) integrated into Home Assistant Core needs to be version [v1.9.9](https://github.com/AlexxIT/go2rtc/releases/tag/v1.9.9) or later.
   - If you are using a self-hosted go2rtc with Home Assistant, update the self-hosted go2rtc version to v1.9.9 or later.
     - Self-hosted refers to configuring go2rtc/url as described on [here](https://www.home-assistant.io/integrations/go2rtc/).
+
+### With HACS
+[![Open your Home Assistant instance and open a repository inside the Home Assistant Community Store.](https://my.home-assistant.io/badges/hacs_repository.svg)](https://my.home-assistant.io/redirect/hacs_repository/?owner=hsakoh&repository=ha-switchbot-kvs-camera&category=integration)
+
+### Manual
+1. Copy the `switchbot_camera` directory from `custom_components` in this repository and place inside your Home Assistant's `custom_components` directory.
+2. Restart Home Assistant
+3. Follow the instructions in the `Setup` section
+
+### Setup
+[![Open your Home Assistant instance and start setting up a new integration.](https://my.home-assistant.io/badges/config_flow_start.svg)](https://my.home-assistant.io/redirect/config_flow_start/?domain=switchbot_camera)
 
 ## Configuration
 
