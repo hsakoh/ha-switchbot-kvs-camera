@@ -29,14 +29,22 @@ Custom Component for Integrating SwitchBot Pan/Tilt Cam **Plus** with Home Assis
 [IndoorCamProduct]: https://switch-bot.com/pages/switchbot-indoor-cam
 [IndoorCamProductJP]: https://www.switchbot.jp/products/switchbot-indoor-cam
 
-### Reference Information
+> [!TIP]
+> If you want to integrate unsupported devices into Home Assistant:
+> 
+> 1. These devices use TuyaSDK.
+> 2. Remove the camera from the SwitchBot app.
+> 3. Register the camera in the [Smart Life app](https://play.google.com/store/apps/details?id=com.tuya.smartlife&hl=en).
+> 4. You can use the [Tuya integration](https://www.home-assistant.io/integrations/tuya/).
 
-If you want to integrate unsupported devices into Home Assistant:
-
-1. These devices use TuyaSDK.
-2. Remove the camera from the SwitchBot app.
-3. Register the camera in the [Smart Life app](https://play.google.com/store/apps/details?id=com.tuya.smartlife&hl=en).
-4. You can use the [Tuya integration](https://www.home-assistant.io/integrations/tuya/).
+> [!IMPORTANT]
+> The following support documentation has been published.
+> 
+> [How to View My SwitchBot Camera's Videos via Home Assistant? – SwitchBot Help Center](https://support.switch-bot.com/hc/en-us/articles/31984833990423-How-to-View-My-SwitchBot-Camera-s-Videos-via-Home-Assistant) [[JP]](https://support.switch-bot.com/hc/ja/articles/31984833990423-Home-Assistant%E3%81%ABSwitchBot%E3%82%AB%E3%83%A1%E3%83%A9%E6%98%A0%E5%83%8F%E3%82%92%E8%A1%A8%E7%A4%BA%E3%81%99%E3%82%8B)
+> 
+> It appears that an official feature enabling operation as an ONVIF/RTSP camera will be offered in the future.
+> 
+> (As of now—June 10, 2025—it was not yet configurable.)
 
 ## Supported features
 
