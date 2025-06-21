@@ -214,6 +214,20 @@ SWITCHES: list[SwitchDefinition] = [
             device_mac
         ].set_mute_record(False),
     ),
+    SwitchDefinition(
+        key="rstp_open",
+        is_on_func=lambda device_mac, coordinator: coordinator.data.kvs_statuses[
+            device_mac
+        ].rtsp["open"]
+        if device_mac in coordinator.data.kvs_statuses
+        else None,
+        turn_on_func=lambda device_mac, coordinator: coordinator.mqtt_kvs_cams[
+            device_mac
+        ].set_rstp(True),
+        turn_off_func=lambda device_mac, coordinator: coordinator.mqtt_kvs_cams[
+            device_mac
+        ].set_rstp(False),
+    ),
 ]
 
 

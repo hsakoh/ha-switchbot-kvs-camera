@@ -48,6 +48,9 @@
       },
       "preset_remove": {
         "name": "お気に入りを削除"
+      },
+      "update_rtsp_account": {
+        "name": "カメラアカウント 更新"
       }
     },
     "number": {
@@ -85,6 +88,12 @@
       },
       "device_mac": {
         "name": "デバイスID"
+      },
+      "rstp_rtsp_main_url": {
+        "name": "RTSP メインURL"
+      },
+      "rstp_rtsp_sub_url": {
+        "name": "RTSP サブURL"
       }
     },
     "switch": {
@@ -123,6 +132,9 @@
       },
       "mute_recording": {
         "name": "ローカルストレージ 音なしで録画"
+      },
+      "rstp_open": {
+        "name": "カメラアカウント 有効"
       }
     },
     "select": {
@@ -170,6 +182,12 @@
     "text": {
       "create_preset_name": {
         "name": "お気に入りの名称を入力"
+      },
+      "rstp_password": {
+        "name": "カメラアカウント パスワード"
+      },
+      "rstp_user_name": {
+        "name": "カメラアカウント ユーザー名"
       }
     }
   },

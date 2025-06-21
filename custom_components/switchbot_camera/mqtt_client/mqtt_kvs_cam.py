@@ -22,6 +22,16 @@ class Detectalarm:
     open: bool
 
 
+class Rtsp:
+    """Rstp."""
+
+    open: bool
+    password: str
+    rtspMainUrl: str  # noqa: N815
+    rtspSubUrl: str  # noqa: N815
+    userName: str  # noqa: N815
+
+
 class KvsStatus:
     """Status."""
 
@@ -51,6 +61,7 @@ class KvsStatus:
     muteRecord: bool  # noqa: N815
     recordMode: int  # noqa: N815
     reslution: str
+    rtsp: Rtsp
     sdcardFormateTime: int  # noqa: N815
     sdcardStatus: int  # noqa: N815
     sensitivityLevel: str  # noqa: N815
@@ -225,6 +236,7 @@ class SwitchBotMqttKVSCam(MqttDevice):
                     "setSensitive",
                     "muteRecord",
                     "createPreset",
+                    "rtspEnable",
                     # select
                     "setAntiFlicker",
                     "set_night_vision",
@@ -427,6 +439,21 @@ class SwitchBotMqttKVSCam(MqttDevice):
             ),
         )
 
+    def update_rtsp_account(self, userName: str, password: str) -> None:
+        """update_rtsp_account."""
+        self._mqtt_client.publish(
+            self.control_topic,
+            json.dumps(
+                {
+                    "type": "rtspUsernamePasswd",
+                    "userName": userName,
+                    "password": password,
+                    "timestamp": int(time.time()),
+                    "identifier": self.identifier,
+                }
+            ),
+        )
+
     def set_auto_upgrade(self, open: bool) -> None:
         """set_auto_upgrade."""
         self._mqtt_client.publish(
@@ -489,6 +516,20 @@ class SwitchBotMqttKVSCam(MqttDevice):
             json.dumps(
                 {
                     "type": "muteRecord",
+                    "open": open,
+                    "timestamp": int(time.time()),
+                    "identifier": self.identifier,
+                }
+            ),
+        )
+
+    def set_rstp(self, open: bool) -> None:
+        """set_rstp."""
+        self._mqtt_client.publish(
+            self.control_topic,
+            json.dumps(
+                {
+                    "type": "rtspEnable",
                     "open": open,
                     "timestamp": int(time.time()),
                     "identifier": self.identifier,

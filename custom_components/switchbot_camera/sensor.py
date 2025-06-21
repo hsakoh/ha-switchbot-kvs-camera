@@ -119,6 +119,22 @@ SENSORS: list[SensorDefinition] = [
         key="device_mac",
         native_value_func=lambda device_mac, data: device_mac,
     ),
+    SensorDefinition(
+        key="rstp_rtsp_main_url",
+        native_value_func=lambda device_mac, coordinator: coordinator.data.kvs_statuses[
+            device_mac
+        ].rtsp["rtspMainUrl"]
+        if device_mac in coordinator.data.kvs_statuses
+        else None,
+    ),
+    SensorDefinition(
+        key="rstp_rtsp_sub_url",
+        native_value_func=lambda device_mac, coordinator: coordinator.data.kvs_statuses[
+            device_mac
+        ].rtsp["rtspSubUrl"]
+        if device_mac in coordinator.data.kvs_statuses
+        else None,
+    ),
 ]
 
 

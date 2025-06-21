@@ -39,6 +39,28 @@ TEXTS: list[TextDefinition] = [
         else None,
         icon=None,
     ),
+    TextDefinition(
+        key="rstp_password",
+        native_value_func=lambda device_mac,
+        coordinator: coordinator.data.kvs_rtsp_password.get(device_mac, None),
+        set_value_func=lambda device_mac, coordinator, value,: (
+            coordinator.data.kvs_rtsp_password.update({device_mac: value})
+        )
+        if device_mac in coordinator.data.kvs_rtsp_password
+        else None,
+        icon=None,
+    ),
+    TextDefinition(
+        key="rstp_user_name",
+        native_value_func=lambda device_mac,
+        coordinator: coordinator.data.kvs_rtsp_username.get(device_mac, None),
+        set_value_func=lambda device_mac, coordinator, value,: (
+            coordinator.data.kvs_rtsp_username.update({device_mac: value})
+        )
+        if device_mac in coordinator.data.kvs_rtsp_username
+        else None,
+        icon=None,
+    ),
 ]
 
 

@@ -41,6 +41,8 @@ class CoordinatorData:
     kvs_presets: dict[str, list[KVSPreset]] | None = None
     kvs_preset_selects: dict[str, str] | None = None
     kvs_preset_texts: dict[str, str] | None = None
+    kvs_rtsp_username: dict[str, str] | None = None
+    kvs_rtsp_password: dict[str, str] | None = None
 
 
 class SwitchBotKVSCameraCoordinator(DataUpdateCoordinator):
@@ -140,6 +142,8 @@ class SwitchBotKVSCameraCoordinator(DataUpdateCoordinator):
         self.data.kvs_presets = {}
         self.data.kvs_preset_texts = {}
         self.data.kvs_preset_selects = {}
+        self.data.kvs_rtsp_username = {}
+        self.data.kvs_rtsp_password = {}
         for kvsCam in (
             device
             for device in self.data.devices.devices
@@ -167,10 +171,14 @@ class SwitchBotKVSCameraCoordinator(DataUpdateCoordinator):
             ] = await self.api_client.list_kvs_preset(kvsCam.device_mac, kvsCam.groupID)
             self.data.kvs_preset_texts[kvsCam.device_mac] = ""
             self.data.kvs_preset_selects[kvsCam.device_mac] = ""
+            self.data.kvs_rtsp_username[kvsCam.device_mac] = ""
+            self.data.kvs_rtsp_password[kvsCam.device_mac] = ""
 
     def on_kvs_status_update(self, device_mac: str, kvs_status: KvsStatus) -> None:
         """Handle kvs status update."""
         self.data.kvs_statuses[device_mac] = kvs_status
+        self.data.kvs_rtsp_username[device_mac] = kvs_status.rtsp["userName"]
+        self.data.kvs_rtsp_password[device_mac] = kvs_status.rtsp["password"]
 
         # Notify the coordinator that the data has changed
         self.hass.loop.call_soon_threadsafe(self.async_set_updated_data, self.data)

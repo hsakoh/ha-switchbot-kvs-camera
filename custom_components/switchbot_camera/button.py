@@ -100,6 +100,16 @@ BUTTONS: list[ButtonDefinition] = [
         icon=None,
     ),
     ButtonDefinition(
+        key="update_rtsp_account",
+        action=lambda device_mac, coordinator: coordinator.mqtt_kvs_cams[
+            device_mac
+        ].update_rtsp_account(
+            coordinator.data.kvs_rtsp_username.get(device_mac, None),
+            coordinator.data.kvs_rtsp_password.get(device_mac, None),
+        ),
+        icon=None,
+    ),
+    ButtonDefinition(
         key="preset_move",
         action=lambda device_mac, coordinator: (
             coordinator.mqtt_kvs_cams[device_mac].trigger_preset(
