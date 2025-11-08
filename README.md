@@ -29,7 +29,7 @@ Custom Component for Integrating SwitchBot Pan/Tilt Cam **Plus** with Home Assis
 [PanTiltCamPlus5MPProductJP]: https://www.switchbot.jp/products/switchbot-pan-tilt-cam-plus-5mp
 [IndoorCamProduct]: https://switch-bot.com/pages/switchbot-indoor-cam
 [IndoorCamProductJP]: https://www.switchbot.jp/products/switchbot-indoor-cam
-[VideoDoorbellProduct]: https://www.switch-bot.com/products/switchbot-smart-video-doorbell
+[VideoDoorbellProduct]: https://www.switch-bot.com/products/switchbot-video-doorbell
 [VideoDoorbellProductJP]: https://www.switchbot.jp/products/switchbot-smart-video-doorbell
 
 > [!TIP]
