@@ -1,20 +1,16 @@
 {
   "domain": "switchbot_camera",
   "name": "SwitchBot KVS Camera",
-  "codeowners": [
-    "@hsakoh"
-  ],
+  "codeowners": ["@hsakoh"],
   "config_flow": true,
   "dependencies": ["ffmpeg"],
   "documentation": "https://github.com/hsakoh/ha-switchbot-kvs-camera",
   "homekit": {},
   "iot_class": "cloud_polling",
   "issue_tracker": "https://github.com/hsakoh/ha-switchbot-kvs-camera/issues",
-  "requirements": [
-    "boto3==1.34.131"
-  ],
+  "requirements": ["boto3==1.34.131"],
   "single_config_entry": false,
   "ssdp": [],
-  "version": "0.1.4",
+  "version": "0.1.5",
   "zeroconf": []
 }

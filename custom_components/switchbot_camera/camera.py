@@ -69,7 +69,7 @@ async def async_setup_entry(
             ),
         )
         for device in coordinator.data.devices.devices
-        if device.device_detail.device_type in ("WoCamKvs5mp", "WoCamKvs")
+        if device.device_detail.device_type in ("WoCamKvs5mp", "WoCamKvs", "W1050000")
     ]
     async_add_entities(cameras)
 
@@ -94,6 +94,11 @@ class SwitchBotKVSCameraEntity(SwitchBotKVSEntity, CameraEntity):
         self.hass = hass
         self.entry_unique_id = entry_unique_id
         self.resolution = resolution
+        self.play_type = (
+            "0"
+            if device.device_detail.device_type in ("WoCamKvs5mp", "WoCamKvs")
+            else "1"
+        )
         self.snapshot_enable = snapshot_enable
         self.kvs_credential = kvs_credential
         self._attr_supported_features = CameraEntityFeature.STREAM
@@ -150,6 +155,8 @@ class SwitchBotKVSCameraEntity(SwitchBotKVSEntity, CameraEntity):
 
     async def __get_signed_url(self) -> str:
         region = self.device.device_detail.awsRegion
+        if region is None:
+            region = self.device.device_detail.channelARN.split(":")[3]
         expiration_date = datetime.fromtimestamp(
             self.kvs_credential.expiration / 1000, tz=UTC
         )
@@ -189,6 +196,8 @@ class SwitchBotKVSCameraEntity(SwitchBotKVSEntity, CameraEntity):
             + "#format=switchbot"
             + "#resolution="
             + self.resolution.lower()
+            + "#play_type="
+            + self.play_type
             + "#client_id="
             + clientId
             + "#ice_servers="
@@ -306,7 +315,7 @@ class SwitchBotKVSCameraEntity(SwitchBotKVSEntity, CameraEntity):
         )
         resp = await rest_client._client.request("GET", "/api")  # noqa: SLF001
         respJson = await resp.json()
-        rtsp_port: str = respJson["rtsp"]["listen"].split(':')[1]
+        rtsp_port: str = respJson["rtsp"]["listen"].split(":")[1]
         if isDownload:
             return rtsp_port
 

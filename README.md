@@ -13,6 +13,7 @@ Custom Component for Integrating SwitchBot Pan/Tilt Cam **Plus** with Home Assis
 | [Pan/Tilt Cam Plus 2K(3MP)][PanTiltCamPlus3MPProduct] [[JP][PanTiltCamPlus3MPProductJP]]                   |   ✅    |
 | [Pan/Tilt Cam Plus 3K(5MP)][PanTiltCamPlus5MPProduct] [[JP][PanTiltCamPlus5MPProductJP]]                   |   ✅    |
 | [Indoor Cam][IndoorCamProduct] [[JP][IndoorCamProductJP]]                                                  |    -    |
+| [Video Doorbell][Video DoorbellProduct] [[JP][Video DoorbellProductJP]]                                    |   ✅    |
 
 [OutdoorSpotlightCam1080PProduct]: https://www.switch-bot.com/products/switchbot-outdoor-spotlight-cam?variant=43002833338535
 [OutdoorSpotlightCam1080PProductJP]: https://www.switchbot.jp/products/switchbot-outdoor-spotlight-cam
@@ -28,10 +29,12 @@ Custom Component for Integrating SwitchBot Pan/Tilt Cam **Plus** with Home Assis
 [PanTiltCamPlus5MPProductJP]: https://www.switchbot.jp/products/switchbot-pan-tilt-cam-plus-5mp
 [IndoorCamProduct]: https://switch-bot.com/pages/switchbot-indoor-cam
 [IndoorCamProductJP]: https://www.switchbot.jp/products/switchbot-indoor-cam
+[VideoDoorbellProduct]: https://www.switch-bot.com/products/switchbot-smart-video-doorbell
+[VideoDoorbellProductJP]: https://www.switchbot.jp/products/switchbot-smart-video-doorbell
 
 > [!TIP]
 > If you want to integrate unsupported devices into Home Assistant:
-> 
+>
 > 1. These devices use TuyaSDK.
 > 2. Remove the camera from the SwitchBot app.
 > 3. Register the camera in the [Smart Life app](https://play.google.com/store/apps/details?id=com.tuya.smartlife&hl=en).
@@ -39,14 +42,25 @@ Custom Component for Integrating SwitchBot Pan/Tilt Cam **Plus** with Home Assis
 
 > [!IMPORTANT]
 > The following support documentation has been published.
-> 
+>
 > [How to View My SwitchBot Camera's Videos via Home Assistant? – SwitchBot Help Center](https://support.switch-bot.com/hc/en-us/articles/31984833990423-How-to-View-My-SwitchBot-Camera-s-Videos-via-Home-Assistant) [[JP]](https://support.switch-bot.com/hc/ja/articles/31984833990423-Home-Assistant%E3%81%ABSwitchBot%E3%82%AB%E3%83%A1%E3%83%A9%E6%98%A0%E5%83%8F%E3%82%92%E8%A1%A8%E7%A4%BA%E3%81%99%E3%82%8B)
-> 
+>
 > It appears that an official feature enabling operation as an ONVIF/RTSP camera will be offered in the future.
-> 
+>
 > (As of now—June 10, 2025—it was not yet configurable.)
 
-## Supported features
+## Supported features for Video Doorbell
+
+| Feature              | Description                                                                           |
+| -------------------- | ------------------------------------------------------------------------------------- |
+| Camera Stream        | Displays the camera Stream                                                            |
+
+Currently, **Audio is not supported**. This is due to two reasons:
+
+- Specifying an audio codec other than AAC causes the camera to respond with a broken SDP.
+- go2rtc (pion?) does not support the AAC codec in WebRTC.
+
+## Supported features for Pan/Tilt Cam Plus
 
 | Feature              | Description                                                                           |
 | -------------------- | ------------------------------------------------------------------------------------- |
@@ -86,6 +100,7 @@ Custom Component for Integrating SwitchBot Pan/Tilt Cam **Plus** with Home Assis
 | SdCard Used(GB)      | Displays the used space on the SD card                                                |
 
 Currently, **Audio is not supported**. This is due to two reasons:
+
 - Specifying an audio codec other than AAC causes the camera to respond with a broken SDP.
 - go2rtc (pion?) does not support the AAC codec in WebRTC.
 
@@ -102,20 +117,30 @@ The following features are not currently implemented. Pull requests are welcome:
 
 ### Requirement
 
+#### Pan/Tilt Cam Plus
 - Ensure that the version of Home Assistant Core is **2025.4.1** or later.
   - This is because the [go2rtc](https://github.com/AlexxIT/go2rtc) integrated into Home Assistant Core needs to be version [v1.9.9](https://github.com/AlexxIT/go2rtc/releases/tag/v1.9.9) or later.
   - If you are using a self-hosted go2rtc with Home Assistant, update the self-hosted go2rtc version to v1.9.9 or later.
     - Self-hosted refers to configuring go2rtc/url as described on [here](https://www.home-assistant.io/integrations/go2rtc/).
 
+#### Video Doorbell
+- Ensure that the version of Home Assistant Core is **2025.11.0** or later.
+  - This is because the [go2rtc](https://github.com/AlexxIT/go2rtc) integrated into Home Assistant Core needs to be version [v1.9.11](https://github.com/AlexxIT/go2rtc/releases/tag/v1.9.11) or later.
+  - If you are using a self-hosted go2rtc with Home Assistant, update the self-hosted go2rtc version to v1.9.11 or later.
+    - Self-hosted refers to configuring go2rtc/url as described on [here](https://www.home-assistant.io/integrations/go2rtc/).
+
 ### With HACS
+
 [![Open your Home Assistant instance and open a repository inside the Home Assistant Community Store.](https://my.home-assistant.io/badges/hacs_repository.svg)](https://my.home-assistant.io/redirect/hacs_repository/?owner=hsakoh&repository=ha-switchbot-kvs-camera&category=integration)
 
 ### Manual
+
 1. Copy the `switchbot_camera` directory from `custom_components` in this repository and place inside your Home Assistant's `custom_components` directory.
 2. Restart Home Assistant
 3. Follow the instructions in the `Setup` section
 
 ### Setup
+
 [![Open your Home Assistant instance and start setting up a new integration.](https://my.home-assistant.io/badges/config_flow_start.svg)](https://my.home-assistant.io/redirect/config_flow_start/?domain=switchbot_camera)
 
 ## Configuration

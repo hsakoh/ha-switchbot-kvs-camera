@@ -29,11 +29,14 @@ class SwitchBotKVSEntity(CoordinatorEntity):
     @property
     def device_info(self) -> DeviceInfo:
         """Return device information."""
-        byte1 = (self.device.mcu_version >> 24) & 0xFF
-        byte2 = (self.device.mcu_version >> 16) & 0xFF
-        byte3 = (self.device.mcu_version >> 8) & 0xFF
-        byte4 = self.device.mcu_version & 0xFF
-        fw_version = f"{byte1}.{byte2}.{byte3}.{byte4}"
+        if self.device.device_detail.device_type in ("", ""):
+            byte1 = (self.device.mcu_version >> 24) & 0xFF
+            byte2 = (self.device.mcu_version >> 16) & 0xFF
+            byte3 = (self.device.mcu_version >> 8) & 0xFF
+            byte4 = self.device.mcu_version & 0xFF
+            fw_version = f"{byte1}.{byte2}.{byte3}.{byte4}"
+        else:
+            fw_version = None
         return DeviceInfo(
             name=self.device.device_name,
             manufacturer="SwitchBot",
