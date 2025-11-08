@@ -13,7 +13,7 @@ Custom Component for Integrating SwitchBot Pan/Tilt Cam **Plus** with Home Assis
 | [Pan/Tilt Cam Plus 2K(3MP)][PanTiltCamPlus3MPProduct] [[JP][PanTiltCamPlus3MPProductJP]]                   |   ✅    |
 | [Pan/Tilt Cam Plus 3K(5MP)][PanTiltCamPlus5MPProduct] [[JP][PanTiltCamPlus5MPProductJP]]                   |   ✅    |
 | [Indoor Cam][IndoorCamProduct] [[JP][IndoorCamProductJP]]                                                  |    -    |
-| [Video Doorbell][Video DoorbellProduct] [[JP][Video DoorbellProductJP]]                                    |   ✅    |
+| [Video Doorbell][VideoDoorbellProduct] [[JP][VideoDoorbellProductJP]]                                      |   ✅    |
 
 [OutdoorSpotlightCam1080PProduct]: https://www.switch-bot.com/products/switchbot-outdoor-spotlight-cam?variant=43002833338535
 [OutdoorSpotlightCam1080PProductJP]: https://www.switchbot.jp/products/switchbot-outdoor-spotlight-cam
