@@ -111,7 +111,7 @@ class SwitchBotKVSTextEntity(SwitchBotKVSEntity, TextEntity):
         self._attr_icon = text_definition.icon
         self._attr_has_entity_name = True
         self.entity_id = (
-            f"text.switchbot_camera_{device.device_mac}_{text_definition.key}"
+            f"text.switchbot_camera_{device.device_mac.lower()}_{text_definition.key}"
         )
         self.unique_id = (
             f"text.switchbot_camera_{device.device_mac}_{text_definition.key}"

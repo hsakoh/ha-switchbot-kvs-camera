@@ -107,7 +107,7 @@ class SwitchBotKVSNumberEntity(SwitchBotKVSEntity, NumberEntity):
         self._attr_icon = number_definition.icon
         self._attr_has_entity_name = True
         self.entity_id = (
-            f"number.switchbot_camera_{device.device_mac}_{number_definition.key}"
+            f"number.switchbot_camera_{device.device_mac.lower()}_{number_definition.key}"
         )
         self.unique_id = (
             f"number.switchbot_camera_{device.device_mac}_{number_definition.key}"

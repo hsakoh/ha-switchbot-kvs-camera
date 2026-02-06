@@ -211,7 +211,7 @@ class SwitchBotKVSSelectEntity(SwitchBotKVSEntity, SelectEntity):
         self._attr_icon = select_definition.icon
         self._attr_has_entity_name = True
         self.entity_id = (
-            f"select.switchbot_camera_{device.device_mac}_{select_definition.key}"
+            f"select.switchbot_camera_{device.device_mac.lower()}_{select_definition.key}"
         )
         self.unique_id = (
             f"select.switchbot_camera_{device.device_mac}_{select_definition.key}"

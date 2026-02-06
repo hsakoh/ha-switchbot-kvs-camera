@@ -177,7 +177,7 @@ class SwitchBotKVSButtonEntity(SwitchBotKVSEntity, ButtonEntity):
         self._attr_icon = button_definition.icon
         self._attr_has_entity_name = True
         self.entity_id = (
-            f"button.switchbot_camera_{device.device_mac}_{button_definition.key}"
+            f"button.switchbot_camera_{device.device_mac.lower()}_{button_definition.key}"
         )
         self.unique_id = (
             f"button.switchbot_camera_{device.device_mac}_{button_definition.key}"

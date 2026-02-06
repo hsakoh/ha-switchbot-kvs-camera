@@ -11,6 +11,6 @@
   "requirements": ["boto3==1.34.131"],
   "single_config_entry": false,
   "ssdp": [],
-  "version": "0.1.6",
+  "version": "0.1.7",
   "zeroconf": []
 }
