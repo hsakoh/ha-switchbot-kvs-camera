@@ -68,7 +68,7 @@ async def async_setup_entry(
             ),
         )
         for device in coordinator.data.devices.devices
-        if device.device_detail.device_type in ("WoCamKvs5mp", "WoCamKvs", "W1050000")
+        if device.device_detail.device_type in ("WoCamKvs5mp", "WoCamKvs", "W1050000", "W1156000")
     ]
     async_add_entities(cameras)
 
@@ -95,7 +95,7 @@ class SwitchBotKVSCameraEntity(SwitchBotKVSEntity, CameraEntity):
         self.resolution = resolution
         self.play_type = (
             "0"
-            if device.device_detail.device_type in ("WoCamKvs5mp", "WoCamKvs")
+            if device.device_detail.device_type in ("WoCamKvs5mp", "WoCamKvs", "W1156000")
             else "1"
         )
         self.snapshot_enable = snapshot_enable

@@ -242,7 +242,7 @@ async def async_setup_entry(
     for kvsCam in (
         device
         for device in coordinator.data.devices.devices
-        if device.device_detail.device_type in ("WoCamKvs5mp", "WoCamKvs")
+        if device.device_detail.device_type in ("WoCamKvs5mp", "WoCamKvs", "W1156000")
     ):
         entities.extend(
             [

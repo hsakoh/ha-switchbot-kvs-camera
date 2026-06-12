@@ -10,10 +10,11 @@ Custom Component for Integrating SwitchBot Pan/Tilt Cam **Plus** with Home Assis
 | [Outdoor Spotlight Cam 2K(3MP)][OutdoorSpotlightCam2K3MPProduct] [[JP][OutdoorSpotlightCam2K3MPProductJP]] |    -    |
 | [Pan/Tilt Cam][PanTiltCamProduct] [[JP][PanTiltCamProductJP]]                                              |    -    |
 | [Pan/Tilt Cam 2K(3MP)][PanTiltCam2K3MPProduct] [[JP][PanTiltCam2K3MPProductJP]]                            |    -    |
-| [Pan/Tilt Cam Plus 2K(3MP)][PanTiltCamPlus3MPProduct] [[JP][PanTiltCamPlus3MPProductJP]]                   |   ✅    |
-| [Pan/Tilt Cam Plus 3K(5MP)][PanTiltCamPlus5MPProduct] [[JP][PanTiltCamPlus5MPProductJP]]                   |   ✅    |
+| [Pan/Tilt Cam Plus 2K(3MP)][PanTiltCamPlus3MPProduct] [[JP][PanTiltCamPlus3MPProductJP]]                   |    ✅    |
+| [Pan/Tilt Cam Plus 3K(5MP)][PanTiltCamPlus5MPProduct] [[JP][PanTiltCamPlus5MPProductJP]]                   |    ✅    |
+| [Outdoor Pan/Tilt Cam 3K(5MP)][OutdoorPanTiltCam3K5MPProduct] [[JP][OutdoorPanTiltCam3K5MPProductJP]]      |    ✅    |
 | [Indoor Cam][IndoorCamProduct] [[JP][IndoorCamProductJP]]                                                  |    -    |
-| [Video Doorbell][VideoDoorbellProduct] [[JP][VideoDoorbellProductJP]]                                      |   ✅    |
+| [Video Doorbell][VideoDoorbellProduct] [[JP][VideoDoorbellProductJP]]                                      |    ✅    |
 
 [OutdoorSpotlightCam1080PProduct]: https://www.switch-bot.com/products/switchbot-outdoor-spotlight-cam?variant=43002833338535
 [OutdoorSpotlightCam1080PProductJP]: https://www.switchbot.jp/products/switchbot-outdoor-spotlight-cam
@@ -27,7 +28,9 @@ Custom Component for Integrating SwitchBot Pan/Tilt Cam **Plus** with Home Assis
 [PanTiltCamPlus3MPProductJP]: https://www.switchbot.jp/products/switchbot-pan-tilt-cam-plus-3mp
 [PanTiltCamPlus5MPProduct]: https://us.switch-bot.com/pages/switchbot-pan-tilt-cam-plus-3k
 [PanTiltCamPlus5MPProductJP]: https://www.switchbot.jp/products/switchbot-pan-tilt-cam-plus-5mp
-[IndoorCamProduct]: https://switch-bot.com/pages/switchbot-indoor-cam
+[OutdoorPanTiltCam3K5MPProduct]: https://www.switch-bot.com/products/outdoor-ptc-3k5mp
+[OutdoorPanTiltCam3K5MPProductJP]: https://www.switchbot.jp/products/switchbot-outdoor-pan-tilt-cam-5mp
+[IndoorCamProduct]: https://www.switch-bot.com/pages/switchbot-indoor-cam
 [IndoorCamProductJP]: https://www.switchbot.jp/products/switchbot-indoor-cam
 [VideoDoorbellProduct]: https://www.switch-bot.com/products/switchbot-video-doorbell
 [VideoDoorbellProductJP]: https://www.switchbot.jp/products/switchbot-smart-video-doorbell
@@ -51,16 +54,16 @@ Custom Component for Integrating SwitchBot Pan/Tilt Cam **Plus** with Home Assis
 
 ## Supported features for Video Doorbell
 
-| Feature              | Description                                                                           |
-| -------------------- | ------------------------------------------------------------------------------------- |
-| Camera Stream        | Displays the camera Stream                                                            |
+| Feature       | Description                |
+| ------------- | -------------------------- |
+| Camera Stream | Displays the camera Stream |
 
 Currently, **Audio is not supported**. This is due to two reasons:
 
 - Specifying an audio codec other than AAC causes the camera to respond with a broken SDP.
 - go2rtc (pion?) does not support the AAC codec in WebRTC.
 
-## Supported features for Pan/Tilt Cam Plus
+## Supported features for Pan/Tilt Cam Plus & Outdoor Pan/Tilt Cam 3K
 
 | Feature              | Description                                                                           |
 | -------------------- | ------------------------------------------------------------------------------------- |
