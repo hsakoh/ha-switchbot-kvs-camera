@@ -25,7 +25,7 @@ class SwitchBotMqttClient(threading.Thread):
 
     def __init__(
         self,
-        device_id: str,
+        client_id: str,
         mqtt_self_signed_endpoint: str,
         mqtt_self_signed_cert_public_key_pem: str,
         mqtt_self_signed_cert_private_key_pem: str,
@@ -34,7 +34,7 @@ class SwitchBotMqttClient(threading.Thread):
         """Initialize."""
         super().__init__()
         self._stop_event = threading.Event()
-        self.device_id = device_id
+        self.client_id = client_id
         self.mqtt_self_signed_endpoint = mqtt_self_signed_endpoint
         self.mqtt_self_signed_cert_public_key_pem = mqtt_self_signed_cert_public_key_pem
         self.mqtt_self_signed_cert_private_key_pem = (
@@ -149,7 +149,7 @@ class SwitchBotMqttClient(threading.Thread):
         self._mqtt_client = new_mqtt_client
 
     def _start(self) -> paho_mqtt_client.Client:
-        client = paho_mqtt_client.Client(client_id=self.device_id)
+        client = paho_mqtt_client.Client(client_id=self.client_id)
         with TemporaryDirectory() as temp_dir:
             with Path.open(f"{temp_dir}/cert.pem", mode="wb") as cert_file:  # pylint: disable=unspecified-encoding
                 cert_file.write(

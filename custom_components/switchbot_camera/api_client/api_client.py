@@ -13,6 +13,7 @@ from aiohttp import ClientSession
 from cryptography.hazmat.primitives import serialization
 from cryptography.hazmat.primitives.serialization import pkcs12
 
+from ..client_identity import normalize_device_id
 from .exceptions import ApiError
 from .model.devices import Device, DeviceDetail, Devices, Remote
 from .model.group import Group
@@ -77,12 +78,15 @@ class SwitchBotApiClient:
     async def __user_login(self, username: str, password: str) -> ApiCredential:
         """Login SwitchBot."""
 
-        url = "https://account.api.switchbot.net/account/api/v1/user/login"
+        # Use v2 to match the official app (.saz session 001). Request/response shape is identical to v1.
+        url = "https://account.api.switchbot.net/account/api/v2/user/login"
         headers = {"Content-Type": "application/json"}
         data = {
             "clientId": "5nnwmhmsa9xxskm14hd85lm9bm",
             "deviceInfo": {
-                "deviceId": self.device_id,
+                # Declare the normalized (4-4-4-4) value so it shares its origin with the
+                # MQTT ClientId / KVS identifier.
+                "deviceId": normalize_device_id(self.device_id),
                 "deviceName": self.device_name,
                 "model": self.model,
             },
@@ -243,7 +247,7 @@ class SwitchBotApiClient:
         data = {
             "clientId": "5nnwmhmsa9xxskm14hd85lm9bm",
             "clientSecret": "vzxjw7rvmduka4rlysdcv0bfke70icql33ol1pvr",
-            "deviceId": self.device_id,
+            "deviceId": normalize_device_id(self.device_id),
             "refreshToken": self.api_credential.refresh_token,
             "userId": self.api_credential.jwt_payload["userID"],
         }

@@ -18,6 +18,7 @@ from .api_client.api_client import (
     SwitchBotApiClient,
 )
 from .api_client.exceptions import ApiError
+from .client_identity import kvs_identifier, mqtt_client_id, normalize_device_id
 from .const import DOMAIN, LOGGER
 from .mqtt_client.mqtt_client import SwitchBotMqttClient
 from .mqtt_client.mqtt_kvs_cam import (
@@ -86,7 +87,10 @@ class SwitchBotKVSCameraCoordinator(DataUpdateCoordinator):
             save_refreshed_token=self.save_refreshed_token,
         )
         self.mqtt_client = SwitchBotMqttClient(
-            device_id=config_entry.data["device_id"],
+            client_id=mqtt_client_id(
+                config_entry.data["user_id"],
+                normalize_device_id(config_entry.data["device_id"]),
+            ),
             mqtt_self_signed_endpoint=config_entry.data["mqtt_self_signed_endpoint"],
             mqtt_self_signed_cert_public_key_pem=config_entry.data[
                 "mqtt_self_signed_cert_public_key_pem"
@@ -134,7 +138,7 @@ class SwitchBotKVSCameraCoordinator(DataUpdateCoordinator):
         while not self.mqtt_client.is_connected():
             await asyncio.sleep(1)
 
-        parts = self.config_entry.unique_id.split("-")
+        device_id = normalize_device_id(self.config_entry.data["device_id"])
         self.mqtt_kvs_cams = {}
         self.data.kvs_statuses = {}
         self.data.kvs_sd_card_capacities = {}
@@ -152,7 +156,7 @@ class SwitchBotKVSCameraCoordinator(DataUpdateCoordinator):
             mqtt_kvs_cam = SwitchBotMqttKVSCam(
                 mqtt_client=self.mqtt_client,
                 device=kvsCam,
-                identifier=f"android_{kvsCam.device_mac.lower()}_{parts[3]}{parts[4][:4]}_{parts[4][4:]}",
+                identifier=kvs_identifier(kvsCam.device_mac, device_id),
                 update_kvs_status=self.on_kvs_status_update,
                 update_sd_card_capacity=self.update_sd_card_capacity,
                 update_wifi_info=self.update_wifi_info,
