@@ -4,9 +4,11 @@
       "already_configured": "Device is already configured"
     },
     "error": {
-      "cannot_connect": "Failed to connect",
-      "invalid_auth": "Invalid authentication",
-      "unknown": "Unexpected error"
+      "cannot_connect": "接続に失敗しました",
+      "invalid_auth": "認証に失敗しました",
+      "invalid_mfa_code": "認証コードが正しくありません",
+      "mfa_token_expired": "認証の有効期限が切れました。最初からやり直してください。",
+      "unknown": "予期しないエラーが発生しました"
     },
     "step": {
       "user": {
@@ -19,6 +21,13 @@
         "data": {
           "password": "パスワード",
           "username": "ユーザー名(メールアドレス)"
+        }
+      },
+      "mfa": {
+        "title": "二段階認証",
+        "description": "アカウントのメールアドレスに認証コードを送信しました。コードを入力してログインを完了してください。",
+        "data": {
+          "verify_code": "認証コード"
         }
       }
     }

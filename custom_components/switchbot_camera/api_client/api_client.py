@@ -14,7 +14,7 @@ from cryptography.hazmat.primitives import serialization
 from cryptography.hazmat.primitives.serialization import pkcs12
 
 from ..client_identity import normalize_device_id
-from .exceptions import ApiError
+from .exceptions import ApiError, MfaRequired, MfaTokenExpired
 from .model.devices import Device, DeviceDetail, Devices, Remote
 from .model.group import Group
 from .model.kvs_credential import KvsCredential
@@ -53,8 +53,24 @@ class SwitchBotApiClient:
         return self._local_session
 
     async def login(self, username: str, password: str) -> ApiCredential:
-        """Login,Get userinfo,Get endpoints."""
+        """Login,Get userinfo,Get endpoints.
+
+        Raises :class:`MfaRequired` (carrying the ``mfa_token``) when the account has
+        two-factor authentication enabled; the caller then drives
+        :meth:`send_mfa_code` and :meth:`login_mfa`.
+        """
         api_credentials = await self.__user_login(username, password)
+        return await self.__complete_login(api_credentials)
+
+    async def login_mfa(self, mfa_token: str, verify_code: str) -> ApiCredential:
+        """Verify a two-factor code, then finish exactly like a normal login."""
+        api_credentials = await self.__mfa_verify(mfa_token, verify_code)
+        return await self.__complete_login(api_credentials)
+
+    async def __complete_login(
+        self, api_credentials: ApiCredential
+    ) -> ApiCredential:
+        """Fetch userinfo/endpoints/policyCer for an already-authenticated credential."""
         user_info = await self.__get_user_info(api_credentials.access_token)
         api_credentials.bot_region = user_info["botRegion"]
         api_credentials.user_id = user_info["userID"]
@@ -109,14 +125,87 @@ class SwitchBotApiClient:
                 raise ApiError(f"Server error. status code {resp.get('statusCode')}")
 
             LOGGER.debug("URL:%s Response:%s", url, resp)
-            access_token = resp["body"]["access_token"]
-            refresh_token = resp["body"]["refresh_token"]
-            jwt_payload = json.loads(
-                base64.b64decode(access_token.split(".")[1] + "==").decode()
+            body = resp.get("body", {})
+            # Two-factor accounts return statusCode 100 but no access_token; instead the
+            # body carries mfa_enabled + mfa_token. Surface that so the caller can drive
+            # the code/send + mfa/verify steps.
+            if body.get("mfa_enabled") and "access_token" not in body:
+                raise MfaRequired(body["mfa_token"])
+            return self.__build_credential(body)
+
+    def __build_credential(self, body: dict[str, Any]) -> ApiCredential:
+        """Build an ApiCredential from a login/mfa-verify response body."""
+        if "access_token" not in body:
+            LOGGER.warning("Login response missing access_token. keys=%s", list(body))
+            raise ApiError(
+                f"Login response missing access_token. keys={list(body)}"
             )
-            return self.ApiCredential(
-                self.device_id, access_token, refresh_token, jwt_payload
-            )
+        access_token = body["access_token"]
+        refresh_token = body["refresh_token"]
+        jwt_payload = json.loads(
+            base64.b64decode(access_token.split(".")[1] + "==").decode()
+        )
+        return self.ApiCredential(
+            self.device_id, access_token, refresh_token, jwt_payload
+        )
+
+    async def send_mfa_code(self, mfa_token: str) -> None:
+        """Send the two-factor verification code to the account email."""
+        url = "https://account.api.switchbot.net/account/api/v2/verification/code/send"
+        headers = {"Content-Type": "application/json"}
+        data = {
+            "clientId": "5nnwmhmsa9xxskm14hd85lm9bm",
+            "method": "email",
+            "ops": "mfa",
+            "proof": {"mfaToken": mfa_token},
+        }
+        async with self._session.post(
+            url, headers=headers, data=json.dumps(data)
+        ) as response:
+            if response.status != 200:
+                LOGGER.warning("URL:%s Status:%s", url, response.status)
+                raise ApiError(f"Server error. http status code {response.status}")
+
+            resp = await response.json()
+            if not resp.get("statusCode") or resp["statusCode"] != 100:
+                LOGGER.warning("URL:%s Response:%s", url, resp)
+                if resp.get("statusCode") == 2007:
+                    raise MfaTokenExpired("mfa_token expired")
+                raise ApiError(f"Server error. status code {resp.get('statusCode')}")
+
+            LOGGER.debug("URL:%s Response:%s", url, resp)
+
+    async def __mfa_verify(self, mfa_token: str, verify_code: str) -> ApiCredential:
+        """Exchange a two-factor code + mfa_token for tokens (same body as login)."""
+        url = "https://account.api.switchbot.net/account/api/v1/user/mfa/verify"
+        headers = {"Content-Type": "application/json"}
+        data = {
+            "clientId": "5nnwmhmsa9xxskm14hd85lm9bm",
+            "auth": {"method": "email", "credential": verify_code},
+            "mfaToken": mfa_token,
+            "deviceInfo": {
+                # Same normalized value as the login body so the session origin matches.
+                "deviceId": normalize_device_id(self.device_id),
+                "deviceName": self.device_name,
+                "model": self.model,
+            },
+        }
+        async with self._session.post(
+            url, headers=headers, data=json.dumps(data)
+        ) as response:
+            if response.status != 200:
+                LOGGER.warning("URL:%s Status:%s", url, response.status)
+                raise ApiError(f"Server error. http status code {response.status}")
+
+            resp = await response.json()
+            if not resp.get("statusCode") or resp["statusCode"] != 100:
+                LOGGER.warning("URL:%s Response:%s", url, resp)
+                if resp.get("statusCode") == 2007:
+                    raise MfaTokenExpired("mfa_token expired")
+                raise ApiError(f"Server error. status code {resp.get('statusCode')}")
+
+            LOGGER.debug("URL:%s Response:%s", url, resp)
+            return self.__build_credential(resp.get("body", {}))
 
     async def __get_user_info(self, access_token: str) -> dict[str, Any]:
         """Get UserInfo."""

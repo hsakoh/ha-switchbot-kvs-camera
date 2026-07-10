@@ -12,11 +12,20 @@
           "username": "[%key:common::config_flow::data::username%]",
           "password": "[%key:common::config_flow::data::password%]"
         }
+      },
+      "mfa": {
+        "title": "Two-factor authentication",
+        "description": "A verification code was sent to your account email. Enter it below to finish signing in.",
+        "data": {
+          "verify_code": "Verification code"
+        }
       }
     },
     "error": {
       "cannot_connect": "[%key:common::config_flow::error::cannot_connect%]",
       "invalid_auth": "[%key:common::config_flow::error::invalid_auth%]",
+      "invalid_mfa_code": "Invalid verification code",
+      "mfa_token_expired": "The verification session expired. Please start over and sign in again.",
       "unknown": "[%key:common::config_flow::error::unknown%]"
     },
     "abort": {

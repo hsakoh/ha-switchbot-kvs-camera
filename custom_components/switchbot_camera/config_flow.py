@@ -16,12 +16,11 @@ from homeassistant.config_entries import (
 )
 from homeassistant.const import APPLICATION_NAME, CONF_PASSWORD, CONF_USERNAME
 from homeassistant.core import HomeAssistant, callback
-from homeassistant.exceptions import HomeAssistantError
 from homeassistant.helpers.aiohttp_client import async_get_clientsession
 from homeassistant.helpers.selector import selector
 
 from .api_client.api_client import SwitchBotApiClient
-from .api_client.exceptions import ApiError
+from .api_client.exceptions import ApiError, MfaRequired, MfaTokenExpired
 from .const import (
     DOMAIN,
     RESOLUTION,
@@ -33,6 +32,8 @@ from .const import (
 
 _LOGGER = logging.getLogger(__name__)
 
+CONF_VERIFY_CODE = "verify_code"
+
 STEP_USER_DATA_SCHEMA = vol.Schema(
     {
         vol.Required(CONF_USERNAME): str,
@@ -40,28 +41,21 @@ STEP_USER_DATA_SCHEMA = vol.Schema(
     }
 )
 
+STEP_MFA_DATA_SCHEMA = vol.Schema(
+    {
+        vol.Required(CONF_VERIFY_CODE): str,
+    }
+)
 
-async def validate_input(
-    hass: HomeAssistant, hardware_id: str, data: dict[str, Any]
-) -> SwitchBotApiClient.ApiCredential:
-    """Validate the user input allows us to connect.
 
-    Data has the keys from STEP_USER_DATA_SCHEMA with values provided by the user.
-    """
-
-    client = SwitchBotApiClient(
+def _create_client(hass: HomeAssistant, device_id: str) -> SwitchBotApiClient:
+    """Build an API client bound to the integration's device identity."""
+    return SwitchBotApiClient(
         http_client_session=async_get_clientsession(hass),
-        device_id=hardware_id,
+        device_id=device_id,
         device_name=APPLICATION_NAME,
         model=f"{DOMAIN}-integration",
     )
-
-    try:
-        api_credential = await client.login(data[CONF_USERNAME], data[CONF_PASSWORD])
-    except ApiError as err:
-        raise InvalidAuth from err
-
-    return api_credential
 
 
 class ConfigFlow(ConfigFlow, domain=DOMAIN):
@@ -70,6 +64,9 @@ class ConfigFlow(ConfigFlow, domain=DOMAIN):
     VERSION = 1
 
     device_id: str | None = None
+    _client: SwitchBotApiClient | None = None
+    _mfa_token: str | None = None
+    _reconfigure_entry: ConfigEntry | None = None
 
     @staticmethod
     @callback
@@ -85,15 +82,18 @@ class ConfigFlow(ConfigFlow, domain=DOMAIN):
         if user_input is not None:
             if not self.device_id:
                 self.device_id = str(uuid.uuid4())
+            self._client = _create_client(self.hass, self.device_id)
             try:
-                api_credential = await validate_input(
-                    self.hass, self.device_id, user_input
+                api_credential = await self._client.login(
+                    user_input[CONF_USERNAME], user_input[CONF_PASSWORD]
                 )
-            except CannotConnect:
-                errors["base"] = "cannot_connect"
-            except InvalidAuth:
+            except MfaRequired as err:
+                mfa_result = await self._async_start_mfa(err.mfa_token, errors)
+                if mfa_result is not None:
+                    return mfa_result
+            except ApiError:
                 errors["base"] = "invalid_auth"
-            except Exception:
+            except Exception:  # noqa: BLE001
                 _LOGGER.exception("Unexpected exception")
                 errors["base"] = "unknown"
             else:
@@ -115,20 +115,24 @@ class ConfigFlow(ConfigFlow, domain=DOMAIN):
         config_entry = self.hass.config_entries.async_get_entry(
             self.context["entry_id"]
         )
+        self._reconfigure_entry = config_entry
         if not self.device_id:
             self.device_id = config_entry.data["device_id"]
             assert self.device_id
 
         if user_input is not None:
+            self._client = _create_client(self.hass, self.device_id)
             try:
-                api_credential = await validate_input(
-                    self.hass, self.device_id, user_input
+                api_credential = await self._client.login(
+                    user_input[CONF_USERNAME], user_input[CONF_PASSWORD]
                 )
-            except CannotConnect:
-                errors["base"] = "cannot_connect"
-            except InvalidAuth:
+            except MfaRequired as err:
+                mfa_result = await self._async_start_mfa(err.mfa_token, errors)
+                if mfa_result is not None:
+                    return mfa_result
+            except ApiError:
                 errors["base"] = "invalid_auth"
-            except Exception:  # pylint: disable=broad-except
+            except Exception:  # noqa: BLE001
                 _LOGGER.exception("Unexpected exception")
                 errors["base"] = "unknown"
             else:
@@ -142,6 +146,66 @@ class ConfigFlow(ConfigFlow, domain=DOMAIN):
             step_id="reconfigure",
             data_schema=STEP_USER_DATA_SCHEMA,
             errors=errors,
+        )
+
+    async def _async_start_mfa(
+        self, mfa_token: str, errors: dict[str, str]
+    ) -> ConfigFlowResult | None:
+        """Request an email code and show the MFA form.
+
+        Returns the MFA form to render, or ``None`` to let the caller re-render its
+        own form with ``errors`` populated (code send failed).
+        """
+        assert self._client is not None
+        self._mfa_token = mfa_token
+        try:
+            await self._client.send_mfa_code(mfa_token)
+        except MfaTokenExpired:
+            errors["base"] = "mfa_token_expired"
+            return None
+        except Exception:  # noqa: BLE001
+            _LOGGER.exception("Failed to send MFA code")
+            errors["base"] = "cannot_connect"
+            return None
+        return self.async_show_form(
+            step_id="mfa", data_schema=STEP_MFA_DATA_SCHEMA
+        )
+
+    async def async_step_mfa(
+        self, user_input: dict[str, Any] | None = None
+    ) -> ConfigFlowResult:
+        """Verify the two-factor code and finish the (re)configuration."""
+        errors: dict[str, str] = {}
+        if user_input is not None:
+            assert self._client is not None
+            assert self._mfa_token is not None
+            try:
+                api_credential = await self._client.login_mfa(
+                    self._mfa_token, user_input[CONF_VERIFY_CODE]
+                )
+            except MfaTokenExpired:
+                errors["base"] = "mfa_token_expired"
+            except ApiError:
+                errors["base"] = "invalid_mfa_code"
+            except Exception:  # noqa: BLE001
+                _LOGGER.exception("Unexpected exception")
+                errors["base"] = "unknown"
+            else:
+                if self._reconfigure_entry is not None:
+                    return self.async_update_reload_and_abort(
+                        self._reconfigure_entry,
+                        unique_id=self._reconfigure_entry.unique_id,
+                        data=api_credential.__dict__,
+                        reason="reconfigure_successful",
+                    )
+                await self.async_set_unique_id(api_credential.user_id)
+                self._abort_if_unique_id_configured()
+                return self.async_create_entry(
+                    title=api_credential.email, data=api_credential.__dict__
+                )
+
+        return self.async_show_form(
+            step_id="mfa", data_schema=STEP_MFA_DATA_SCHEMA, errors=errors
         )
 
 
@@ -183,11 +247,3 @@ class OptionsFlowHandler(OptionsFlow):
         )
 
         return self.async_show_form(step_id="init", data_schema=data_schema)
-
-
-class CannotConnect(HomeAssistantError):
-    """Error to indicate we cannot connect."""
-
-
-class InvalidAuth(HomeAssistantError):
-    """Error to indicate there is invalid auth."""

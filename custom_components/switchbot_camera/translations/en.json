@@ -6,6 +6,8 @@
     "error": {
       "cannot_connect": "Failed to connect",
       "invalid_auth": "Invalid authentication",
+      "invalid_mfa_code": "Invalid verification code",
+      "mfa_token_expired": "The verification session expired. Please start over and sign in again.",
       "unknown": "Unexpected error"
     },
     "step": {
@@ -19,6 +21,13 @@
         "data": {
           "password": "Password",
           "username": "Username(Email Address)"
+        }
+      },
+      "mfa": {
+        "title": "Two-factor authentication",
+        "description": "A verification code was sent to your account email. Enter it below to finish signing in.",
+        "data": {
+          "verify_code": "Verification code"
         }
       }
     }
